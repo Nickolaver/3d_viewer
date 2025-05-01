@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>3D Model Viewer</title>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        background: #000;
+      }
+      model-viewer {
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <model-viewer id="viewer"
+      alt="3D model"
+      auto-rotate
+      camera-controls
+      background-color="#ffffff">
+    </model-viewer>
+
+    <script>
+      // Get the URL parameter 'model'
+      const urlParams = new URLSearchParams(window.location.search);
+      const modelFile = urlParams.get('model'); // e.g., 'model1.glb'
+
+      // If the model parameter exists, load it into the model-viewer
+      if (modelFile) {
+        const modelViewer = document.getElementById('viewer');
+        // Check if the model file is hosted on Google Drive and convert the link to a direct download link
+        if (modelFile.includes('drive.google.com')) {
+          const fileId = modelFile.split('/d/')[1].split('/')[0]; // Extract file ID from Google Drive link
+          modelViewer.src = `https://drive.google.com/uc?id=${fileId}`; // Generate direct download link
+        } else {
+          modelViewer.src = modelFile; // Fallback if it's a direct model link
+        }
+      } else {
+        alert("No model specified!");
+      }
+    </script>
+  </body>
+</html>
